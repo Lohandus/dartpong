@@ -1,5 +1,6 @@
 import 'dart:html';
 import 'dart:math';
+import 'package:game_loop/game_loop_html.dart';
 
 CanvasRenderingContext2D context;
 num ballPos = 0;
@@ -8,20 +9,18 @@ void main() {
   CanvasElement canvas = query("#container");
   context = canvas.context2D;
 
-  window.setImmediate(() {
-    requestRedraw();
-  });
-}
-
-requestRedraw() {
-  window.requestAnimationFrame(draw);
-}
-
-void draw(num _) {
-  drawBackground();
-  drawBall();
+  GameLoop gameLoop = new GameLoopHtml(canvas);
   
-  requestRedraw();
+  gameLoop.onUpdate = ((gameLoop) {
+    ballPos += 300 * gameLoop.dt;
+  });
+  
+  gameLoop.onRender = ((gameLoop) {
+    drawBackground();
+    drawBall();
+  });
+  
+  gameLoop.start();
 }
 
 void drawBackground() {
@@ -29,7 +28,6 @@ void drawBackground() {
 }
 
 void drawBall() {
-  ballPos += 2;
   rect(ballPos, 200, 10, 10, '#fff');
 }
 

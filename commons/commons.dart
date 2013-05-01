@@ -15,8 +15,12 @@ class Rectangle {
   
   Rectangle(this.x, this.y, this.width, this.height);
 
-  bool colide(vec2 v) {
-    return !(v.x < x || v.x > x + width || v.y < y || v.y > y + height);
+  bool contains(vec2 p) {
+    return !(x > p.x || x + width < p.x || y > p.y || y + height < p.y);
+  }
+  
+  bool collide(Rectangle other) {
+    return !(x > other.x + other.width || x + width < other.x || y > other.y + other.height || y + height < other.y);
   }
   
 }

@@ -22,10 +22,10 @@ class Game {
         this.middleX = width / 2,
         this.middleY = height / 2 {
     
-    _ballVel = new vec2(400.0, 400.0);
+    _ballVel = new vec2(300.0, 300.0);
     
     _ball = new Rectangle(10, middleY, 8, 8);
-    _racketP1 = new Rectangle(108 - 4, middleY - 13, 8, 26);
+    _racketP1 = new Rectangle(108 - 4, middleY - 18, 8, 36);
     _racketP2 = new Rectangle(width - 108 + 4, middleY - 13, 8, 26);
   }
   
@@ -34,27 +34,40 @@ class Game {
   Rectangle get racketP2 => _racketP2;
 
   void update(double dt) {
+    _updateRackets(dt);
+    _updateBall(dt);
+  }
+
+  void _updateRackets(double dt) {
     if ((_p1Movement == RacketMovement.UP && _racketP1.position.y > 0) || 
         (_p1Movement == RacketMovement.DOWN && _racketP1.position.y + _racketP1.height < height)) {
       _racketP1.position.y += 500 * _p1Movement * dt;
     }
-    
-    _updateBall(dt);
   }
   
   void _updateBall(double dt) {
-    vec2 newPos = _ball.position + _ballVel.scaled(dt);
+    vec2 oldPos = _ball.position;
+    _ball.position += _ballVel.scaled(dt);
 
-    if (newPos.y < 0) {
+    if (_ball.position.y < 0) {
       _ballVel = reflect(_ballVel, new vec2(0.0, 1.0));
-    } else if (newPos.x + _ball.width > width) {
+      _ball.position = oldPos;
+      
+    } else if (_ball.position.x + _ball.width > width) {
       _ballVel = reflect(_ballVel, new vec2(-1.0, 0.0));
-    } else if (newPos.y + _ball.height > height) {
+      _ball.position = oldPos;
+      
+    } else if (_ball.position.y + _ball.height > height) {
       _ballVel = reflect(_ballVel, new vec2(0.0, -1.0));
-    } else if (newPos.x < 0) {
+      _ball.position = oldPos;
+      
+    } else if (_ball.position.x < 0) {
       _ballVel = reflect(_ballVel, new vec2(1.0, 0.0));
-    } else {
-      _ball.position = newPos;
+      _ball.position = oldPos;
+      
+    } else if (_ball.collide(_racketP1)) {
+      _ballVel = reflect(_ballVel, new vec2(1.0, 0.0));
+      _ball.position = oldPos;
     }
   }
 

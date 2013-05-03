@@ -7,9 +7,9 @@ class Game {
   final num middleX;
   final num middleY;
   
-  vec2 _ballPos;
   vec2 _ballVel;
   
+  Rectangle _ball;
   Rectangle _racketP1;
   Rectangle _racketP2;
   
@@ -19,14 +19,14 @@ class Game {
         this.middleX = width / 2,
         this.middleY = height / 2 {
     
-    _ballPos = new vec2(10.0, middleY);
     _ballVel = new vec2(300.0, 300.0);
     
+    _ball = new Rectangle(10, middleY, 8, 8);
     _racketP1 = new Rectangle(108 - 4, middleY - 13, 8, 26);
     _racketP2 = new Rectangle(width - 108 + 4, middleY - 13, 8, 26);
   }
   
-  vec2 get ballPosition => _ballPos;
+  Rectangle get ball => _ball;
   Rectangle get racketP1 => _racketP1;
   Rectangle get racketP2 => _racketP2;
 
@@ -35,7 +35,7 @@ class Game {
   }
   
   void _updateBall(double dt) {
-    vec2 newPos = _ballPos + _ballVel.scaled(dt);
+    vec2 newPos = _ball.position + _ballVel.scaled(dt);
 
     if (newPos.y < 0) {
       _ballVel = reflect(_ballVel, new vec2(0.0, 1.0));
@@ -46,7 +46,7 @@ class Game {
     } else if (newPos.x < 0) {
       _ballVel = reflect(_ballVel, new vec2(1.0, 0.0));
     } else {
-      _ballPos = newPos;
+      _ball.position = newPos;
     }
   }
 

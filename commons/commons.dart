@@ -8,12 +8,17 @@ vec2 reflect(vec2 v, vec2 normal) {
 }
 
 class Rectangle {
-  num x;
-  num y;
+  vec2 position;
   num width;
   num height;
+
+  Rectangle(num x, num y, num width, num height)
+      : this.position = new vec2(x.toDouble(), y.toDouble()),
+        this.width = width,
+        this.height = height;
   
-  Rectangle(this.x, this.y, this.width, this.height);
+  num get x => position.x;
+  num get y => position.y;
 
   bool contains(vec2 p) {
     return !(x > p.x || x + width < p.x || y > p.y || y + height < p.y);

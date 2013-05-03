@@ -11,7 +11,8 @@ void main() {
   
   GameLoop gameLoop = new GameLoopHtml(canvas);
   
-  gameLoop.onUpdate = (gameLoop) {
+  gameLoop.onUpdate = (GameLoopHtml gameLoop) {
+    _updateInput(gameLoop, model);
     model.update(gameLoop.dt);
   };
   
@@ -20,4 +21,14 @@ void main() {
   };
   
   gameLoop.start();
+}
+
+void _updateInput(GameLoopHtml gameLoop, Model.Game model) {
+  if (gameLoop.keyboard.isDown(KeyCode.UP))
+    model.setP1Movement(Model.RacketMovement.UP);
+  else if (gameLoop.keyboard.isDown(KeyCode.DOWN))
+    model.setP1Movement(Model.RacketMovement.DOWN);
+  else
+    model.setP1Movement(Model.RacketMovement.NONE);
+
 }

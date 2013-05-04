@@ -2,11 +2,6 @@ library commons;
 
 import 'package:vector_math/vector_math.dart';
 
-
-vec2 reflect(vec2 v, vec2 normal) {
-  return v - normal.scaled(2 * normal.dot(v));
-}
-
 class Rectangle {
   vec2 position;
   num width;

@@ -22,9 +22,9 @@ class Game {
         this.middleX = width / 2,
         this.middleY = height / 2 {
     
-    _ballVel = new vec2(300.0, 300.0);
+    _ballVel = new vec2(400.0, 0.0);
     
-    _ball = new Rectangle(10, middleY, 8, 8);
+    _ball = new Rectangle(middleX, middleY, 8, 8);
     _racketP1 = new Rectangle(108 - 4, middleY - 18, 8, 36);
     _racketP2 = new Rectangle(width - 108 + 4, middleY - 18, 8, 36);
   }
@@ -41,7 +41,7 @@ class Game {
   void _updateRackets(double dt) {
     if ((_p1Movement == RacketMovement.UP && _racketP1.position.y > 0) || 
         (_p1Movement == RacketMovement.DOWN && _racketP1.position.y + _racketP1.height < height)) {
-      _racketP1.position.y += 500 * _p1Movement * dt;
+      _racketP1.position.y += 300 * _p1Movement * dt;
     }
   }
   
@@ -66,13 +66,23 @@ class Game {
       _ball.position = oldPos;
       
     } else if (_ball.collide(_racketP1)) {
-      _ballVel.reflect(new vec2(1.0, 0.0));
+      _rebate(_racketP1, 1);
       _ball.position = oldPos;
     
     } else if (_ball.collide(_racketP2)) {
-      _ballVel.reflect(new vec2(-1.0, 0.0));
+      _rebate(_racketP2, -1);
       _ball.position = oldPos;
     }
+  }
+  
+  void _rebate(Rectangle racket, num direction) {
+    var ballY = _ball.position.y + _ball.height / 2;
+    var racketY = racket.position.y + racket.height / 2;
+    var deflection = (ballY - racketY) / (racket.height / 2);
+    var angle = radians(45.0) * deflection * direction;
+    
+    _ballVel = new vec2(1.0 * direction, 0.0).scaled(_ballVel.length);
+    rotateVec2(_ballVel, angle);
   }
 
   void setP1Movement(int movement) {

@@ -1,6 +1,7 @@
 library commons;
 
 import 'package:vector_math/vector_math.dart';
+import 'dart:math' as Math;
 
 class Rectangle {
   vec2 position;
@@ -22,6 +23,11 @@ class Rectangle {
   bool collide(Rectangle other) {
     return !(x > other.x + other.width || x + width < other.x || y > other.y + other.height || y + height < other.y);
   }
-  
 }
 
+void rotateVec2(vec2 v, num angle) {
+  num xt = (v.x * Math.cos(angle)) - (v.y * Math.sin(angle));
+  num yt = (v.y * Math.cos(angle)) + (v.x * Math.sin(angle));
+  v.x = xt;
+  v.y = yt;
+}
